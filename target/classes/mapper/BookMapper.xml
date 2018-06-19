@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.crud.dao.BookMapper">
+  <resultMap id="BaseResultMap" type="com.zy.crud.bean.Book">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="bname" jdbcType="VARCHAR" property="bname" />
+    <result column="bprice" jdbcType="DOUBLE" property="bprice" />
+    <result column="bnumber" jdbcType="INTEGER" property="bnumber" />
+    <result column="bauthor" jdbcType="VARCHAR" property="bauthor" />
+    <result column="bpress" jdbcType="VARCHAR" property="bpress" />
+    <result column="bisbn" jdbcType="VARCHAR" property="bisbn" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    bid, bname, bprice, bnumber, bauthor, bpress, bisbn
+  </sql>
+  <select id="selectByExample" parameterType="com.zy.crud.bean.BookExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from bookinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bookinfo
+    where bid = #{bid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bookinfo
+    where bid = #{bid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zy.crud.bean.BookExample">
+    delete from bookinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zy.crud.bean.Book">
+    insert into bookinfo (bid, bname, bprice, 
+      bnumber, bauthor, bpress, 
+      bisbn)
+    values (#{bid,jdbcType=INTEGER}, #{bname,jdbcType=VARCHAR}, #{bprice,jdbcType=DOUBLE}, 
+      #{bnumber,jdbcType=INTEGER}, #{bauthor,jdbcType=VARCHAR}, #{bpress,jdbcType=VARCHAR}, 
+      #{bisbn,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zy.crud.bean.Book">
+    insert into bookinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        bid,
+      </if>
+      <if test="bname != null">
+        bname,
+      </if>
+      <if test="bprice != null">
+        bprice,
+      </if>
+      <if test="bnumber != null">
+        bnumber,
+      </if>
+      <if test="bauthor != null">
+        bauthor,
+      </if>
+      <if test="bpress != null">
+        bpress,
+      </if>
+      <if test="bisbn != null">
+        bisbn,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        #{bid,jdbcType=INTEGER},
+      </if>
+      <if test="bname != null">
+        #{bname,jdbcType=VARCHAR},
+      </if>
+      <if test="bprice != null">
+        #{bprice,jdbcType=DOUBLE},
+      </if>
+      <if test="bnumber != null">
+        #{bnumber,jdbcType=INTEGER},
+      </if>
+      <if test="bauthor != null">
+        #{bauthor,jdbcType=VARCHAR},
+      </if>
+      <if test="bpress != null">
+        #{bpress,jdbcType=VARCHAR},
+      </if>
+      <if test="bisbn != null">
+        #{bisbn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zy.crud.bean.BookExample" resultType="java.lang.Long">
+    select count(*) from bookinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update bookinfo
+    <set>
+      <if test="record.bid != null">
+        bid = #{record.bid,jdbcType=INTEGER},
+      </if>
+      <if test="record.bname != null">
+        bname = #{record.bname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bprice != null">
+        bprice = #{record.bprice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.bnumber != null">
+        bnumber = #{record.bnumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.bauthor != null">
+        bauthor = #{record.bauthor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bpress != null">
+        bpress = #{record.bpress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bisbn != null">
+        bisbn = #{record.bisbn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update bookinfo
+    set bid = #{record.bid,jdbcType=INTEGER},
+      bname = #{record.bname,jdbcType=VARCHAR},
+      bprice = #{record.bprice,jdbcType=DOUBLE},
+      bnumber = #{record.bnumber,jdbcType=INTEGER},
+      bauthor = #{record.bauthor,jdbcType=VARCHAR},
+      bpress = #{record.bpress,jdbcType=VARCHAR},
+      bisbn = #{record.bisbn,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zy.crud.bean.Book">
+    update bookinfo
+    <set>
+      <if test="bname != null">
+        bname = #{bname,jdbcType=VARCHAR},
+      </if>
+      <if test="bprice != null">
+        bprice = #{bprice,jdbcType=DOUBLE},
+      </if>
+      <if test="bnumber != null">
+        bnumber = #{bnumber,jdbcType=INTEGER},
+      </if>
+      <if test="bauthor != null">
+        bauthor = #{bauthor,jdbcType=VARCHAR},
+      </if>
+      <if test="bpress != null">
+        bpress = #{bpress,jdbcType=VARCHAR},
+      </if>
+      <if test="bisbn != null">
+        bisbn = #{bisbn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zy.crud.bean.Book">
+    update bookinfo
+    set bname = #{bname,jdbcType=VARCHAR},
+      bprice = #{bprice,jdbcType=DOUBLE},
+      bnumber = #{bnumber,jdbcType=INTEGER},
+      bauthor = #{bauthor,jdbcType=VARCHAR},
+      bpress = #{bpress,jdbcType=VARCHAR},
+      bisbn = #{bisbn,jdbcType=VARCHAR}
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+</mapper>
